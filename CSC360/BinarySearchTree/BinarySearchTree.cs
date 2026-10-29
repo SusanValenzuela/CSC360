@@ -3,17 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CSC360.BinarySearchTree.Strategies;
 
-namespace Datastructures.BinarySearchTree
+namespace CSC360.BinarySearchTree
 {
     public class BinarySearchTree<T> where T : IComparable<T>
     {
         public Node<T>? Root { get; private set; }
         public int Count { get; set; }
 
-        public BinarySearchTree()
+        private readonly IComparisonStrategy<T> _strategy;
+
+        public BinarySearchTree(
+            IComparisonStrategy<T>? strategy = null)
         {
-            
+            _strategy = strategy ?? new AscendingStrategy<T>();
         }
 
         public void Add(T data)
@@ -24,8 +28,9 @@ namespace Datastructures.BinarySearchTree
             }
             else
             {
-                Root.Add(data);
+                Root.Add(data, _strategy);
             }
+
             Count++;
         }
 
@@ -35,17 +40,18 @@ namespace Datastructures.BinarySearchTree
             Count = 0;
         }
 
-        
+
         public void Remove(T value)
         {
-                if (Root == null)
-                {
-                    return;
-                }
-                if(Contains(value))
+            if (Root == null)
             {
-                    Root = Root.Remove(value);
-                    Count--;
+                return;
+            }
+
+            if (Contains(value))
+            {
+                Root = Root.Remove(value, _strategy);
+                Count--;
             }
         }
 
@@ -82,11 +88,10 @@ namespace Datastructures.BinarySearchTree
             {
                 return false;
             }
-            else
-            {
-                return Root.Contains(value);
-            }
+
+            return Root.Contains(value, _strategy);
         }
+
         public string InOrder()
         {
             if (Root == null)
