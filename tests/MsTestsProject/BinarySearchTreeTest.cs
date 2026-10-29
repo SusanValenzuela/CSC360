@@ -1,4 +1,4 @@
-﻿using Datastructures.BinarySearchTree;
+﻿using CSC360.BinarySearchTree;
 using System;
 using System.Collections.Generic;
 using System.Linq;
